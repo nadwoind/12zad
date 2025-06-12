@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="articles"></div>
+  <label for="displayMethod">Wybierz sposób sortowania artykułów</label>
+  <form id="displayMethodForm">
+    <fieldset id="displayMethod">
+      <input type="radio" id="dataAsc" name="sort" value="created_at.asc">
+      <label for="dataAsc">Po dacie rosnąco</label>
+
+      <input type="radio" id="dataDesc" name="sort" value="created_at.desc">
+      <label for="dataDesc">Po dacie malejąco</label>
+
+      <input type="radio" id="alphabet" name="sort" value="title.asc">
+      <label for="aplhabet">Alfabetycznie po nazwie</label>
+    </fieldset>
+    <button>Zatwierdź</button>
+  </form>
+
+  <script type="module" src="/src/main.js"></script>
+
+  <div id="addArticleForm">
+    <p>Dodaj nowy artykuł</p>
+    <form id="sendArticle">
+      <label for="title">Tytuł:</label><input id="title" type="text">
+      <label for="subtitle">Podtytuł:</label><input id="subtitle" type="text">
+      <label for="author">Autor:
+      </label> <input id="author" type="text">
+      <label for="createdAt">Data dodania:</label><input id="createdAt" type="date">
+      <div><label for="content">Treść artykułu:</label><textarea id="content" type="text"></textarea></div>
+      <button id="sendArticleButton" type="submit">Prześlij</button>
+    </form>
+  </div>
+</body>
+
+</html>
