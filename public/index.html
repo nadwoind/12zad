@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog Supabase</title>
+</head>
+<body>
+  <h1>Dodaj artykuł</h1>
+  <form id="sendArticle">
+    <input name="title" placeholder="Tytuł" required /><br />
+    <input name="subtitle" placeholder="Podtytuł" required /><br />
+    <input name="author" placeholder="Autor" required /><br />
+    <input type="datetime-local" name="created_at" required /><br />
+    <textarea name="content" placeholder="Treść" required></textarea><br />
+    <button type="submit">Wyślij</button>
+  </form>
+
+  <h2>Sortuj po:</h2>
+  <select id="sort">
+    <option value="created_at.desc">Nowe najpierw</option>
+    <option value="created_at.asc">Stare najpierw</option>
+  </select>
+
+  <div id="articles"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,74 +1,60 @@
-import { format } from 'date-fns';
-import { pl } from 'date-fns/locale';
+import { supabase } from './supabaseClient';
 
-const API_URL = 'https://fxvqfsxpmnwnenzztlel.supabase.co';
-const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4dnFmc3hwbW53bmVuenp0bGVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0MTY0ODYsImV4cCI6MjA2NDk5MjQ4Nn0.TYKW--AfJzYHsEQgodcA2o2VKUoRvMdKM5KeHm-eZvY.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFycWZ2cHluem1tcm9ta3Z0cG9uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc2NTk3MTQsImV4cCI6MjA2MzIzNTcxNH0.CiGpqOg-PUBZkO3wJN7M7orgsCDRSYb5_EVW7NuS1ZI';
+const form = document.getElementById('sendArticle');
+const sortSelect = document.getElementById('sort');
+const articlesContainer = document.getElementById('articles');
 
-async function giveArticles(order = 'created_at.desc') {
-  try {
-    const res = await fetch(`${API_URL}?select=*&order=${order}`, {
-      headers: {
-        apiKey: API_KEY,
-      },
-    });
-    return await res.json();
-  } catch (err) {
-    console.error('Błąd pobierania:', err);
-    return [];
+async function fetchAndRender(order = { column: 'created_at', ascending: false }) {
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .order(order.column, { ascending: order.ascending });
+
+  if (error) {
+    console.error('Błąd podczas pobierania:', error);
+    articlesContainer.innerText = 'Wystąpił błąd podczas ładowania artykułów.';
+    return;
   }
-}
 
-function renderArticles(articles) {
-  const container = document.getElementById('articles');
-  container.innerHTML = articles.map(a => {
-    const date = new Date(a.created_at);
-    const dateStr = format(date, 'dd MMMM yyyy, HH:mm', { locale: pl });
-    return `
-      <article class="article">
-        <h2>${a.title}</h2>
-        <h3>${a.subtitle}</h3>
-        <p><em>${a.author} — ${dateStr}</em></p>
-        <div>${a.content}</div>
-      </article>
-      <hr>
+  articlesContainer.innerHTML = '';
+  data.forEach((art) => {
+    const el = document.createElement('div');
+    el.innerHTML = `
+      <h3>${art.title}</h3>
+      <h4>${art.subtitle}</h4>
+      <p><em>Autor: ${art.author} | Data: ${new Date(art.created_at).toLocaleString('pl-PL')}</em></p>
+      <p>${art.content}</p>
+      <hr />
     `;
-  }).join('');
+    articlesContainer.appendChild(el);
+  });
 }
 
-document.getElementById('sort').addEventListener('change', async (e) => {
-  const order = e.target.value;
-  const articles = await giveArticles(order);
-  renderArticles(articles);
+sortSelect.addEventListener('change', () => {
+  const [col, dir] = sortSelect.value.split('.');
+  fetchAndRender({ column: col, ascending: dir === 'asc' });
 });
 
-document.getElementById('sendArticle').addEventListener('submit', async (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const data = {
-    title: e.target.title.value,
-    subtitle: e.target.subtitle.value,
-    author: e.target.author.value,
-    created_at: e.target.created_at.value,
-    content: e.target.content.value,
+  const formData = new FormData(form);
+  const newArticle = {
+    title: formData.get('title'),
+    subtitle: formData.get('subtitle'),
+    author: formData.get('author'),
+    created_at: formData.get('created_at'),
+    content: formData.get('content'),
   };
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        apiKey: API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    if (res.status !== 201) throw new Error(`Status: ${res.status}`);
-    e.target.reset();
-    const articles = await giveArticles(document.getElementById('sort').value);
-    renderArticles(articles);
-  } catch (err) {
-    console.error('Błąd wysyłania:', err);
+
+  const { error } = await supabase.from('articles').insert([newArticle]);
+  if (error) {
+    console.error('Błąd przy wysyłaniu:', error);
+    alert('Nie udało się dodać artykułu.');
+  } else {
+    form.reset();
+    fetchAndRender();
   }
 });
 
-(async function init() {
-  const articles = await giveArticles();
-  renderArticles(articles);
-})();
+
+fetchAndRender();
