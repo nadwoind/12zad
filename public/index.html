@@ -3,26 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blog Supabase</title>
+  <title>Zadanie 12 - Artykuły</title>
 </head>
 <body>
-  <h1>Dodaj artykuł</h1>
+  <h1>Lista artykułów</h1>
+  <label for="sort">Sortuj po:</label>
+  <select id="sort">
+    <option value="created_at.desc">Data malejąco</option>
+    <option value="created_at.asc">Data rosnąco</option>
+    <option value="title.asc">Tytuł A–Z</option>
+    <option value="title.desc">Tytuł Z–A</option>
+  </select>
+  <div id="articles"></div>
+
+  <h2>Dodaj nowy artykuł</h2>
   <form id="sendArticle">
     <input name="title" placeholder="Tytuł" required /><br />
-    <input name="subtitle" placeholder="Podtytuł" required /><br />
+    <input name="subtitle" placeholder="Podtytuł" /><br />
     <input name="author" placeholder="Autor" required /><br />
     <input type="datetime-local" name="created_at" required /><br />
     <textarea name="content" placeholder="Treść" required></textarea><br />
     <button type="submit">Wyślij</button>
   </form>
 
-  <h2>Sortuj po:</h2>
-  <select id="sort">
-    <option value="created_at.desc">Nowe najpierw</option>
-    <option value="created_at.asc">Stare najpierw</option>
-  </select>
-
-  <div id="articles"></div>
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>

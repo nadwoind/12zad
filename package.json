@@ -1,33 +1,16 @@
 {
-  "name": "tech10",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "zadanie12",
+  "version": "0.1.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "^4.1.7",
-    "tailwindcss": "^4.1.7",
-    "vite": "^6.3.5"
+    "serve": "vite preview"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.50.0",
-    "date-fns": "^4.1.0"
+    "@supabase/supabase-js": "^2.30.0",
+    "date-fns": "^2.30.0"
   },
-  "description": "",
-  "main": "vite.config.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nadwoind/12zad.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/nadwoind/12zad/issues"
-  },
-  "homepage": "https://github.com/nadwoind/12zad#readme"
+  "devDependencies": {
+    "vite": "^4.0.0"
+  }
 }
