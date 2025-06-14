@@ -10,12 +10,12 @@ async function fetchAndRender() {
   const ascending = direction === 'asc';
 
   const { data, error } = await supabase
-  .from('articles')
-  .select('*')
-  .order(column, { ascending });
+    .from('articles')
+    .select('*')
+    .order(column, { ascending });
 
-console.log("Supabase data:", data);
-console.log("Supabase error:", error);
+  console.log("Supabase data:", data);
+  console.log("Supabase error:", error);
 
   if (error) {
     articlesContainer.innerText = 'Błąd: ' + error.message;
@@ -39,6 +39,8 @@ sortSelect.addEventListener('change', fetchAndRender);
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+  console.log("Wysłano formularz");
+
   const fd = new FormData(form);
   const newArticle = {
     title:      fd.get('title'),
@@ -47,7 +49,13 @@ form.addEventListener('submit', async (e) => {
     created_at: fd.get('created_at'),
     content:    fd.get('content')
   };
+
+  console.log("Dane wysyłane do Supabase:", newArticle);
+
   const { error } = await supabase.from('articles').insert([newArticle]);
+
+  console.log("Supabase insert error:", error);
+
   if (error) {
     alert('Błąd: ' + error.message);
   } else {
@@ -55,5 +63,6 @@ form.addEventListener('submit', async (e) => {
     fetchAndRender();
   }
 });
+
 
 fetchAndRender();
