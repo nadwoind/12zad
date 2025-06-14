@@ -10,9 +10,12 @@ async function fetchAndRender() {
   const ascending = direction === 'asc';
 
   const { data, error } = await supabase
-    .from('articles')
-    .select('*')
-    .order(column, { ascending });
+  .from('articles')
+  .select('*')
+  .order(column, { ascending });
+
+console.log("Supabase data:", data);
+console.log("Supabase error:", error);
 
   if (error) {
     articlesContainer.innerText = 'Błąd: ' + error.message;
